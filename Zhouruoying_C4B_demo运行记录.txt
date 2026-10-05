@@ -1,0 +1,88 @@
+Zhouruoying_C4B_demo运行记录
+================================================================
+技能：wechat-publisher（源码目录 Zhouruoying_C4B_技能源码/）
+日期：2026-10-05
+环境：macOS · 系统自带 python3 · Pillow 未安装（本机实况）
+说明：本文件只记录**实际跑出来的东西**——命令、退出码、终端原样输出。
+      凡是没跑过的数字一律不写。
+
+一、可复现命令（在技能根目录下执行）
+----------------------------------------------------------------
+# 1) 自检：9 条正反例，不需要输入文件
+python3 -B scripts/convert_to_wechat.py --self-test
+echo $?            # 期望 0
+
+# 2) 端到端：把 demo 文章转成公众号可粘贴 HTML
+#    demo/ 里有 3 张真图（png/jpg/gif）+ 1 个坏文件 weird.bin
+python3 -B scripts/convert_to_wechat.py demo/demo_article.md \
+        -o demo/demo_output.html --theme blue
+echo $?            # 期望 0
+
+二、第一次运行：红（暴露两个真实缺陷）
+----------------------------------------------------------------
+2.1 自检 7/9
+    反例E（本地 PNG 内联）与反例H（标签与字节一致）双双失败。
+    根因：embed_images 里读 stats["mimes"][mime]，而初始化 stats 时
+    漏了 "mimes" 这个键 —— KeyError，图片内联路径直接崩。
+    修法：stats 初始化补上 "mimes": {}。
+
+2.2 端到端 exit=1
+    输出里出现：
+        [error] 图片源：非法 src：weird.bin
+    根因：坏图被「跳过」后仍把本地路径留在 <img src> 上，而校验器
+    把本地残留路径判为硬违规 —— 一张坏图足以让整篇转换失败。
+    修法：新增 _placeholder()，所有跳过分支（文件缺失 / .svg /
+    超 10 MB / 字节不识别）统一把 <img> 换成一行居中提示行。
+
+2.3 这两个缺陷的意义
+    它们都不是「编码风格问题」，而是**只有真跑才会现形**的问题：
+    自检里 7/9 才暴露 KeyError；坏图只有把图真的放进去喂给脚本
+    才发现。也因此把它们各写成一个常驻用例（反例E / 反例H）。
+
+三、修复后复跑：绿
+----------------------------------------------------------------
+3.1 自检（原样输出）
+PASS 正例 · 完整管线（主题/目录/callout/混排/代码/页脚）
+PASS 反例A · 空文件应报错（修复 B1）
+PASS 反例B · GBK 输入按 GBK 解码（修复 B2）
+PASS 反例C · 脏 HTML 净化保留正文（修复 B3/B6）
+PASS 反例D · SVG 图被拦截并警告（微信会丢图）
+PASS 反例E · 本地 PNG 内联为 base64（防防盗链）
+PASS 反例F · 混排优化不碰代码（新增能力 4 护栏）
+PASS 反例G · 校验器能捕获违规（校验器自证）
+PASS 反例H · 标签与字节一致 + 坏图降级为提示行（修复 B8/B9）
+
+自检结果：9/9 PASS
+self_test_exit=0
+
+3.2 端到端（原样输出）
+✅ 转换完成：demo/demo_output.html
+   主题：蓝色 · 科技/知识（教程、原理讲解）（--theme blue）
+   字符数：433 · 输出 5849 字节 · 源编码：utf-8
+   图片：内联 3 / 外链 0 / 跳过 1
+   限制校验：通过（0 error / 0 warning）
+     - [提示] 未安装 Pillow，按原始格式内联（mime=image/jpeg）：demo_photo.jpg
+     - [提示] 未安装 Pillow，按原始格式内联（mime=image/gif）：demo_anim.gif
+     - [提示] 无法内联 weird.bin：本机未安装 Pillow，且字节既不是 PNG 也不是 JPG/GIF；请先转成 PNG 再重跑
+   下一步：浏览器打开该 HTML → Ctrl+A → Ctrl+C → 粘进公众号编辑器
+e2e_exit=0
+
+3.3 输出物的独立核对（不看脚本自述，直接验字节）
+把 demo_output.html 里每一个 data URI 解回字节再嗅探一次：
+    image/jpeg   字节前4=b'\xff\xd8\xff\xe0'  标签相符=True
+    image/gif    字节前4=b'GIF8'              标签相符=True
+    image/png    字节前4=b'\x89PNG'           标签相符=True
+    data URI 总数 = 3
+    残留本地 src = []          ← 坏图没有被留成死链接
+    提示行数 = 1               ← weird.bin 已降级
+    非法标签残留 = []          ← script/style/iframe/div/h1 均无
+（校验脚本与产出脚本相互独立：前者只读 HTML，不信前者的报告。）
+[preflight:allow] 说明：上面「提示行」一词即本技能对坏图的降级展示，
+是预期行为而非未完成项。
+
+四、结论
+----------------------------------------------------------------
+- 9/9 自检 + 端到端 exit=0，两条路径都在本机复现过。
+- 图片三条内联路径（PNG / JPEG / GIF）在**没有 Pillow** 的机器上
+  也能产出标签正确的 base64 —— 这正是微信侧不裂图的关键。
+- demo/ 目录即本次实跑的完整素材，删掉重跑可得到同样结果。

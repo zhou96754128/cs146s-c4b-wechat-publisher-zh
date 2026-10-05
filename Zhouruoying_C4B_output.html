@@ -1,0 +1,40 @@
+<p style="background-color: #eef4fb; border: 1px solid #c9ddf2; border-radius: 6px; padding: 14px 18px; margin: 16px 0 22px 0;"><span style="font-size: 16px; font-weight: bold; color: #1f3a5f; margin: 0 0 8px 0;">本文目录</span><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">1. 公众号编辑器到底吃什么</p><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">2. 我的做法：源文件进，能粘贴的 HTML 出</p><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">3. 四个让我觉得「值回票价」的能力</p><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">4. 真正的关键：它会自己「体检」</p><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">5. 一条我这次真正学到的东西</p><p style="font-size: 15px; line-height: 1.9; color: #2b6cb0; margin: 0; ">6. 想试试的话</p></p><span><span><p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">公众号排版总跑版？我做了个「发之前先自检」的转换器</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">在 Markdown 里写得工工整整的一篇文章，复制进公众号编辑器，一贴进去就崩了：标题样式没了、代码块变成一堆小方块、图片裂成空白、表格直接错位。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">这不是你的问题，是公众号编辑器的「口味」太窄。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">公众号编辑器到底吃什么</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">先把心智模型摆正：公众号编辑器不是一个浏览器，它只认一个很窄的 HTML 子集。</p>
+<ul style="margin: 12px 0; padding-left: 22px;">
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 样式必须内联 **。它不认 <span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">class</span> 和 <span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">id</span> 选择器，所以你不能靠一份外部样式表统一样式，只能把样式一条条写进每个标签的 <span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">style</span> 属性里。</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 标签有白名单 **。能用的基本只有：<span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">p、h2、h3、ul、ol、li、span、img、a、table、tr、th、td、br</span>。<span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">script、style、iframe、div、h1</span> 一概不收。</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 图片要内联 **。它只认 PNG / JPG / GIF 的 base64 内联图；外链图会被防盗链机制干掉，SVG 保存后直接丢图。</li>
+</ul>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">说白了，它要的是「内联、扁平、纯白名单」的内容。我们在网页世界里习惯的那套写法，在这里大部分是无效的。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">这就是「排版总跑版」的根因——不是审美问题，是格式不对口。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">我的做法：源文件进，能粘贴的 HTML 出</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">与其每次手工重排，不如把它做成一条流水线。我做了一个叫 wechat-publisher 的小工具，输入 Markdown、纯文本、HTML 或 Word，输出一段能 ** 直接粘进公众号编辑器 ** 的 HTML。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">它做的核心动作就三件：</p>
+<ol style="margin: 12px 0; padding-left: 22px;">
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">把 Markdown 转成 HTML，再把所有样式 ** 内联 ** 到每个标签上；</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">按白名单过滤标签和属性，把违规元素（<span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">script</span>、<span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">div</span>、外链样式）清掉或降级；</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">把本地图片读成 base64 内联进去，解决防盗链丢图的问题。</li>
+</ol>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">四个让我觉得「值回票价」的能力</h2>
+<ul style="margin: 12px 0; padding-left: 22px;">
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 主题与配色系统 **：内置 default / blue / warm / minimal 四套配色，一条参数切换整篇的观感，不用改内容。</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;"><span style="font-weight: bold">Callout 高亮框 </span>：用 <span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">&gt; [!NOTE]</span>、<span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">&gt; [!WARNING]</span> 这样的写法，自动渲染成带图标和底色的提示框，还支持「知识点 / 小技巧 / 警告 / 补充说明」这些中文别名。教程类文章特别受用。</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 自动目录 **：根据标题层级自动生成带锚点的目录，长文不用手排。</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">** 中英混排优化 <span style="font-weight: bold">：自动在中文与英文、数字之间补上该有的间距，并把半角标点规范成中文标点——同时，</span> 代码块被严格保护 **，不会被误伤。</li>
+</ul>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">真正的关键：它会自己「体检」</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">上面这些都是「锦上添花」。真正让我觉得这个工具靠谱的，是它在输出前会跑一遍 ** 自检 **。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">它内置 9 条用例：1 条完整管线正例 + 8 条负例，覆盖空文件、GBK 编码输入、脏 HTML 净化、SVG 图拦截、本地图片内联成 base64、以及「data URI 的标签必须与真实字节一致」这类容易踩的坑。跑完直接告诉你 9/9 PASS 还是哪条转红。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">更有意思的一点是：<span style="font-weight: bold"> 校验器本身也在被测试 </span>。用例里会人为注入一条违规，如果校验器抓不出来，就算失败。这样它就测的是真东西，而不是空跑。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">这套自检让「发之前先知道会不会跑版」变成了可能——而不是发出去之后被读者截图告诉你图裂了。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">一条我这次真正学到的东西</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">做这个工具的过程中，我对「什么算完成」的判断改了。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">AI 很擅长说「已完成」「已通过」。但你把它的话当结论，就会踩坑：它可能只是没报错，而不是真的做对了。所以我现在只认三样东西——<span style="font-weight: bold"> 可复现的退出码、留在磁盘上的日志、被独立复算过的字节 </span>。</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">工具能不能用、标签和字节对不对得上，都要跑一次、看一眼，才算数。这条规则后来贯穿了我做这个工具的全过程：每一次改动，都有一条例例在等着它。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #1f3a5f; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #2b6cb0;">想试试的话</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">工具是零依赖的 Python 脚本，最终产物是一个 <span style="background-color: #eaf2fb; color: #1f6fb2; font-size: 14px; padding: 2px 5px; border-radius: 3px">.skill</span> 技能包，也可以直接当命令行用：</p>
+<p style="background-color: #eef4fb; color: #24292e; font-size: 13px; line-height: 1.6; padding: 14px 16px; margin: 14px 0; border-radius: 6px; border: 1px solid #c9ddf2; white-space: pre-wrap; word-break: break-all; overflow-x: auto">python3 convert_to_wechat.py 你的文章.md -o 输出.html --theme blue<br/>python3 convert_to_wechat.py --self-test    # 跑 9 条正反例自检</p>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">如果你也受够了「贴进公众号就崩」，不妨试试这种「源文件进、HTML 出」的思路。排版本该是机器干的活，人的精力应该留给内容本身。</p></span></span>

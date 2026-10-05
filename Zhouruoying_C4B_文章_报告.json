@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "input": "../Zhouruoying_C4B_文章源文件.md",
+  "output": "../Zhouruoying_C4B_output.html",
+  "theme": "blue",
+  "theme_label": "蓝色 · 科技/知识（教程、原理讲解）",
+  "encoding": "utf-8",
+  "bytes": 10706,
+  "chars": 1922,
+  "images": {
+    "embedded": 0,
+    "remote": 0,
+    "skipped": 0,
+    "mimes": {}
+  },
+  "issues": [],
+  "warnings": []
+}

@@ -1,0 +1,12 @@
+submit-preflight  workdir=/Users/xiaowo/.cogseed-dev/userWorkSpace/检查挑战清单完成情况/C4B  challenge=C4B  name=Zhouruoying
+checks=7  PASS=4  WARN=2  FAIL=1  exit=2
+[FAIL] deliverables       缺件=['*文章链接*'] 空文件=无
+         - *文章链接*
+[PASS] naming             必交物命名前缀统一为 Zhouruoying_C4B_
+[PASS] placeholders       全部文本产物无占位符
+[WARN] aar_present        该挑战 rubric 是否含复盘维度尚未核验；建议仍交 AAR（C4/C2A 均含 20 分复盘维度）
+[PASS] aar_vs_selfeval    AAR 与自评相似度 0.08，不同源
+[WARN] submit_payload     未发现提交载荷（confirm-config.json），跳过字段检查
+[PASS] run_evidence       发现 1 份可复跑证据文件
+         - logs/selftest.log
+VERDICT: RED — 1 项未过，不得提交

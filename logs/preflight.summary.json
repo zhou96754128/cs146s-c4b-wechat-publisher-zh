@@ -1,0 +1,58 @@
+{
+  "challenge": "C4B",
+  "workdir": "/Users/xiaowo/.cogseed-dev/userWorkSpace/检查挑战清单完成情况/C4B",
+  "exit_code": 2,
+  "counts": {
+    "pass": 4,
+    "warn": 2,
+    "fail": 1
+  },
+  "results": [
+    {
+      "name": "deliverables",
+      "status": "FAIL",
+      "detail": "缺件=['*文章链接*'] 空文件=无",
+      "evidence": [
+        "*文章链接*"
+      ]
+    },
+    {
+      "name": "naming",
+      "status": "PASS",
+      "detail": "必交物命名前缀统一为 Zhouruoying_C4B_",
+      "evidence": []
+    },
+    {
+      "name": "placeholders",
+      "status": "PASS",
+      "detail": "全部文本产物无占位符",
+      "evidence": []
+    },
+    {
+      "name": "aar_present",
+      "status": "WARN",
+      "detail": "该挑战 rubric 是否含复盘维度尚未核验；建议仍交 AAR（C4/C2A 均含 20 分复盘维度）",
+      "evidence": []
+    },
+    {
+      "name": "aar_vs_selfeval",
+      "status": "PASS",
+      "detail": "AAR 与自评相似度 0.08，不同源",
+      "evidence": []
+    },
+    {
+      "name": "submit_payload",
+      "status": "WARN",
+      "detail": "未发现提交载荷（confirm-config.json），跳过字段检查",
+      "evidence": []
+    },
+    {
+      "name": "run_evidence",
+      "status": "PASS",
+      "detail": "发现 1 份可复跑证据文件",
+      "evidence": [
+        "logs/selftest.log"
+      ]
+    }
+  ]
+}

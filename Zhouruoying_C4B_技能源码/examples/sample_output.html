@@ -1,0 +1,47 @@
+<p style="background-color: #f6f8fa; border: 1px solid #dddddd; border-radius: 6px; padding: 14px 18px; margin: 16px 0 22px 0;"><span style="font-size: 16px; font-weight: bold; color: #333333; margin: 0 0 8px 0;">本文目录</span><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; ">1. 我给自己的公众号写了个排版工具</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; ">2. 一、它解决什么问题</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; ">3. 二、三个我自己最常用的功能</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; padding-left: 12px;">　　3.1 1. 四套主题</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; padding-left: 12px;">　　3.2 2. Callout 高亮框</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; padding-left: 12px;">　　3.3 3. 自动目录</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; ">4. 三、一个诚实的数字</p><p style="font-size: 15px; line-height: 1.9; color: #0366d6; margin: 0; ">5. 四、小结</p></p><p style="font-size: 26px; font-weight: bold; line-height: 1.4; color: #333333; margin: 8px 0 10px 0;">我给自己的公众号写了个排版工具</p><p style="font-size: 14px; color: #666666; margin: 0 0 18px 0;">Zhouruoying　2026-10-05</p><p style="background-color: #f6f8fa; border: 1px solid #dddddd; border-radius: 6px; padding: 14px 16px; margin: 16px 0 22px 0;"><span style="font-size: 15px; line-height: 1.7; color: #666666; margin: 0;">从一个 383 行的 starter，到一个能跑通 8 项自检的排版技能——中间踩了 7 个坑。</span></p><span><span><h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #333333; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #0366d6;">我给自己的公众号写了个排版工具</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">写公众号最烦的一步不是写作，是 ** 排版 **。每次把 Markdown 粘进编辑器，样式全丢，<br/>
+只能一段段手调字号、行距、颜色。于是我把这件事做成了一个小工具。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #333333; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #0366d6;">一、它解决什么问题</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">把 <span style="background-color: #f5f5f5; color: #d73a49; font-size: 14px; padding: 2px 5px; border-radius: 3px">.md</span> / <span style="background-color: #f5f5f5; color: #d73a49; font-size: 14px; padding: 2px 5px; border-radius: 3px">.docx</span> / <span style="background-color: #f5f5f5; color: #d73a49; font-size: 14px; padding: 2px 5px; border-radius: 3px">.txt</span> 丢进去，直接吐出一段 ** 可以粘贴进微信公众号编辑器 ** 的 HTML：</p>
+<ul style="margin: 12px 0; padding-left: 22px;">
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">样式全部内联，粘贴即生效，不会丢</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">自动剔除微信不支持的标签与 CSS</li>
+<li style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 6px 0;">本地图片转 base64 内联，不会裂图</li>
+</ul>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #333333; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #0366d6;">二、三个我自己最常用的功能</h2>
+<h3 style="font-size: 17px; font-weight: bold; line-height: 1.6; color: #0366d6; margin: 20px 0 8px 0;">1. 四套主题</h3>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">技术文用蓝色，复盘用暖色，观点文用极简黑白：</p>
+<p style="background-color: #f6f8fa; color: #24292e; font-size: 13px; line-height: 1.6; padding: 14px 16px; margin: 14px 0; border-radius: 6px; border: 1px solid #dddddd; white-space: pre-wrap; word-break: break-all; overflow-x: auto"><span style="font-size: 12px; color: #888888">bash</span><br/>python3 scripts/convert_to_wechat.py article.md -o out.html --theme blue</p>
+<h3 style="font-size: 17px; font-weight: bold; line-height: 1.6; color: #0366d6; margin: 20px 0 8px 0;">2. Callout 高亮框</h3>
+<p style="background-color: #eefaf1; border-left: 4px solid #2f9e63; border-radius: 4px; padding: 12px 14px; margin: 14px 0"><span style="font-size: 15px; font-weight: bold; color: #1c5c3a">💡 小技巧</span><br/><span style="font-size: 15px; line-height: 1.7; color: #3f3f3f">
+先跑 <span style="background-color: #f5f5f5; color: #d73a49; font-size: 14px; padding: 2px 5px; border-radius: 3px">--self-test</span>，再跑真实文章。出问题能立刻分清是环境问题还是内容问题。<br/>[!WARNING]<br/>
+不要用 SVG 图片。微信会静默丢弃它，你发出去才发现图没了。</span></p>
+<h3 style="font-size: 17px; font-weight: bold; line-height: 1.6; color: #0366d6; margin: 20px 0 8px 0;">3. 自动目录</h3>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">长文加 <span style="background-color: #f5f5f5; color: #d73a49; font-size: 14px; padding: 2px 5px; border-radius: 3px">--toc</span> 会按标题层级生成带序号的导航清单。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #333333; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #0366d6;">三、一个诚实的数字</h2>
+<table style="border-collapse: collapse; margin: 14px 0; font-size: 14px; width: 100%;">
+<span>
+<tr>
+<th style="background-color: #f6f8fa; color: #333333; font-weight: bold; padding: 8px 10px; text-align: left; border: 1px solid #dddddd;">版本</th>
+<th style="background-color: #f6f8fa; color: #333333; font-weight: bold; padding: 8px 10px; text-align: left; border: 1px solid #dddddd;">行数</th>
+<th style="background-color: #f6f8fa; color: #333333; font-weight: bold; padding: 8px 10px; text-align: left; border: 1px solid #dddddd;">状态</th>
+</tr>
+</span>
+<span>
+<tr>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">starter 原始</td>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">383</td>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">能跑，但有 7 处问题</td>
+</tr>
+<tr>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">我的版本</td>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">1219</td>
+<td style="padding: 8px 10px; border: 1px solid #dddddd; color: #3f3f3f; font-size: 14px;">8 项自检全绿</td>
+</tr>
+</span>
+</table>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">starter 最坑的一处是 ** 空输入静默成功 **：给它一个空文件，它退出码 0 并写出一个空 HTML，<br/>
+你完全不知道发生了什么。现在它会明确报错。</p>
+<h2 style="font-size: 21px; font-weight: bold; line-height: 1.5; color: #333333; margin: 28px 0 12px 0; padding-left: 10px; border-left: 4px solid #0366d6;">四、小结</h2>
+<p style="font-size: 16px; line-height: 1.75; color: #3f3f3f; margin: 12px 0; word-break: break-word;">工具的价值不在功能多，在于 ** 能稳定复现 **。所以我给每一步都留了自检——<br/>
+包括一个专门用来验证「校验器本身有没有失效」的用例。</p></span></span><p style="font-size: 13px; color: #666666; text-align: center; margin: 28px 0 8px 0; padding-top: 14px; border-top: 1px solid #dddddd;">© Zhouruoying　保留所有权利　转载请注明出处</p>
